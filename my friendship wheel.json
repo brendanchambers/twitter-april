@@ -201,39 +201,39 @@
       1.0, 
       1.0, 
       0.0, 
-      0.0, 
-      0.0, 
-      0.0, 
-      0.0, 
-      0.0, 
-      0.0, 
-      0.0, 
-      0.0, 
-      0.0, 
-      0.0, 
-      0.0, 
-      0.0, 
-      0.0, 
-      0.0, 
-      0.0, 
-      0.0, 
-      0.0, 
-      0.0, 
-      0.0, 
-      0.0, 
-      0.0, 
-      0.0, 
-      0.0, 
-      0.0, 
-      0.0, 
-      0.0, 
-      0.0, 
-      0.0, 
-      0.0, 
-      0.0, 
-      0.0, 
-      0.0, 
-      0.0, 
+      1.0, 
+      1.0, 
+      1.0, 
+      1.0, 
+      1.0, 
+      1.0, 
+      1.0, 
+      1.0, 
+      1.0, 
+      1.0, 
+      1.0, 
+      1.0, 
+      1.0, 
+      1.0, 
+      1.0, 
+      1.0, 
+      1.0, 
+      1.0, 
+      1.0, 
+      1.0, 
+      1.0, 
+      1.0, 
+      1.0, 
+      1.0, 
+      1.0, 
+      1.0, 
+      1.0, 
+      1.0, 
+      1.0, 
+      1.0, 
+      1.0, 
+      1.0, 
+      1.0, 
       0.0, 
       0.0, 
       0.0, 
@@ -56154,7 +56154,7 @@
       0.0
     ], 
     [
-      0.0, 
+      1.0, 
       0.0, 
       0.0, 
       0.0, 
@@ -56395,7 +56395,7 @@
       0.0
     ], 
     [
-      0.0, 
+      1.0, 
       0.0, 
       0.0, 
       0.0, 
@@ -56636,7 +56636,7 @@
       0.0
     ], 
     [
-      0.0, 
+      1.0, 
       0.0, 
       0.0, 
       0.0, 
@@ -56877,7 +56877,7 @@
       0.0
     ], 
     [
-      0.0, 
+      1.0, 
       0.0, 
       0.0, 
       0.0, 
@@ -57118,7 +57118,7 @@
       0.0
     ], 
     [
-      0.0, 
+      1.0, 
       0.0, 
       0.0, 
       0.0, 
@@ -57359,7 +57359,7 @@
       0.0
     ], 
     [
-      0.0, 
+      1.0, 
       0.0, 
       0.0, 
       0.0, 
@@ -58694,6 +58694,201 @@
     {
       "source": "societyoftrees", 
       "target": "GuardianData", 
+      "weight": 1
+    }, 
+    {
+      "source": "societyoftrees", 
+      "target": "uchicagogsu", 
+      "weight": 1
+    }, 
+    {
+      "source": "societyoftrees", 
+      "target": "maggieNYT", 
+      "weight": 1
+    }, 
+    {
+      "source": "societyoftrees", 
+      "target": "slpng_giants", 
+      "weight": 1
+    }, 
+    {
+      "source": "societyoftrees", 
+      "target": "greghauenstein", 
+      "weight": 1
+    }, 
+    {
+      "source": "societyoftrees", 
+      "target": "KObradovich", 
+      "weight": 1
+    }, 
+    {
+      "source": "societyoftrees", 
+      "target": "desmoinesdem", 
+      "weight": 1
+    }, 
+    {
+      "source": "societyoftrees", 
+      "target": "mmfa", 
+      "weight": 1
+    }, 
+    {
+      "source": "societyoftrees", 
+      "target": "AlexMorash", 
+      "weight": 1
+    }, 
+    {
+      "source": "societyoftrees", 
+      "target": "albertocairo", 
+      "weight": 1
+    }, 
+    {
+      "source": "societyoftrees", 
+      "target": "visualisingdata", 
+      "weight": 1
+    }, 
+    {
+      "source": "societyoftrees", 
+      "target": "JanWillemTulp", 
+      "weight": 1
+    }, 
+    {
+      "source": "societyoftrees", 
+      "target": "d3visualization", 
+      "weight": 1
+    }, 
+    {
+      "source": "societyoftrees", 
+      "target": "keithellison", 
+      "weight": 1
+    }, 
+    {
+      "source": "societyoftrees", 
+      "target": "repjohnlewis", 
+      "weight": 1
+    }, 
+    {
+      "source": "societyoftrees", 
+      "target": "MichaelPfleger", 
+      "weight": 1
+    }, 
+    {
+      "source": "societyoftrees", 
+      "target": "amprog", 
+      "weight": 1
+    }, 
+    {
+      "source": "societyoftrees", 
+      "target": "politico", 
+      "weight": 1
+    }, 
+    {
+      "source": "societyoftrees", 
+      "target": "thinkprogress", 
+      "weight": 1
+    }, 
+    {
+      "source": "societyoftrees", 
+      "target": "neeratanden", 
+      "weight": 1
+    }, 
+    {
+      "source": "societyoftrees", 
+      "target": "CFR_org", 
+      "weight": 1
+    }, 
+    {
+      "source": "societyoftrees", 
+      "target": "NewAmerica", 
+      "weight": 1
+    }, 
+    {
+      "source": "societyoftrees", 
+      "target": "BrookingsInst", 
+      "weight": 1
+    }, 
+    {
+      "source": "societyoftrees", 
+      "target": "flowingdata", 
+      "weight": 1
+    }, 
+    {
+      "source": "societyoftrees", 
+      "target": "ProPublicaIL", 
+      "weight": 1
+    }, 
+    {
+      "source": "societyoftrees", 
+      "target": "ProPublica", 
+      "weight": 1
+    }, 
+    {
+      "source": "societyoftrees", 
+      "target": "WSJGraphics", 
+      "weight": 1
+    }, 
+    {
+      "source": "societyoftrees", 
+      "target": "PostGraphics", 
+      "weight": 1
+    }, 
+    {
+      "source": "societyoftrees", 
+      "target": "mbostock", 
+      "weight": 1
+    }, 
+    {
+      "source": "societyoftrees", 
+      "target": "nytgraphics", 
+      "weight": 1
+    }, 
+    {
+      "source": "societyoftrees", 
+      "target": "UpshotNYT", 
+      "weight": 1
+    }, 
+    {
+      "source": "societyoftrees", 
+      "target": "Periscopic", 
+      "weight": 1
+    }, 
+    {
+      "source": "societyoftrees", 
+      "target": "data4democracy", 
+      "weight": 1
+    }, 
+    {
+      "source": "societyoftrees", 
+      "target": "Jigsaw", 
+      "weight": 1
+    }, 
+    {
+      "source": "Sweetling", 
+      "target": "societyoftrees", 
+      "weight": 1
+    }, 
+    {
+      "source": "Jayhawkerbecky", 
+      "target": "societyoftrees", 
+      "weight": 1
+    }, 
+    {
+      "source": "criz1225", 
+      "target": "societyoftrees", 
+      "weight": 1
+    }, 
+    {
+      "source": "IlovetheDiana", 
+      "target": "societyoftrees", 
+      "weight": 1
+    }, 
+    {
+      "source": "HoneySi20954650", 
+      "target": "societyoftrees", 
+      "weight": 1
+    }, 
+    {
+      "source": "IUNetSci", 
+      "target": "societyoftrees", 
       "weight": 1
     }
   ], 
