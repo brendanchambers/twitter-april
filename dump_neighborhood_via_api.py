@@ -123,12 +123,12 @@ def visit_node(vertex, edges, adjmat):
             friend_of_friend_idx = screen_name_to_vertex_index(friend_of_friend.screen_name)
             adjmat[current_node_idx, friend_of_friend_idx] += weight
 
-        visited.append(v.screen_name)
+        visited.append(current_user.screen_name)
 
 # FIND FRIENDS OF FRIENDS
 for v in vertices:
-    if not(v.screen_name in visited): # make sure we haven't processed this node yet
-        visit_node(v.screen_name,edges,adjmat)
+    if not(v['screen_name'] in visited): # make sure we haven't processed this node yet
+        visit_node(v,edges,adjmat)
 
 #print vertices[0]
 #print visit_node(vertices[0],edges,adjmat)
