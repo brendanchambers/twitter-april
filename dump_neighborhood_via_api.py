@@ -20,12 +20,12 @@ json_target_string = 'my friend neighborhood_higher_cutoff.json' # json save fil
 
 #  friends_ids , followers_ids  http://tweepy.readthedocs.io/en/v3.5.0/api.html#friendship-methods
 
-def get_friends(user):
+def get_friends(user): # todo add pagination
     time.sleep(60)
     print "sleeping..."
     return api.friends_ids(user)
 
-def get_followers(user):
+def get_followers(user): # todo add pagination
     time.sleep(60)
     print "sleeping..."
     return api.followers_ids(user)
@@ -65,9 +65,21 @@ time.sleep(1) # 900 calls / 15 min allowed
 neighborhood_ids = mergeLists([reference_id], neighborhood_ids) # # don't forget to include the reference user
 vertices = [] # format for the json dump
 for user_id in neighborhood_ids:
-    username = api.get_user(user_id).screen_name
+
+    user = api.get_user(user_id)
+    print user.screen_name
     time.sleep(1) # 900 calls / 15 min allowed
-    vertices.append({"screen_name":username,"id":user_id}) # should probably use 'vertices' instead of 'vertex ids' below, sry
+
+    user_object = {"screen_name":user.screen_name,
+                   "id:":user.id,
+                   "friends_count":user.friends_count,
+                   "followers_count":user.followers_count,
+                   "verified":user.verified,
+                   "utc_offset":user.utc_offset,
+                   "statuses_count":user.statuses_count,
+                   "profile_image_url":user.profile_image_url_https
+    }
+    vertices.append(user_object) # should probably use 'vertices' instead of 'vertex ids' below, sry
 
 #print neighborhood_ids
 N = len(neighborhood_ids)
@@ -106,7 +118,9 @@ for page in range(pages+1):
 visited.append(reference_user);
 
 
-MAX_DEGREE = 10000
+MAX_FRIEND_DEGREE = 15000 #  10000 comprehensively samples > 97% of the local neighborhood for @societyoftrees
+MAX_FOLLOWER_DEGREE = 500 # since the local neighborhood is covered by friends, just sample a small number of followers to sample around edges
+
 def visit_node(vertex):
     
     friend_of_vertex_ids = []
@@ -118,74 +132,87 @@ def visit_node(vertex):
 
     ## check friends:
     print "checking friends of current vertex...."
-    if current_user.friends_count > MAX_DEGREE:
+    if current_user.friends_count > MAX_FRIEND_DEGREE:
         vertex['gulper']=True # todo make sure this actually modifies the vertex object
-        print "this user has too many friends"
+        print "sampling " + str( (MAX_FRIEND_DEGREE/current_user.friends_count)*100) + " % of friends"
     else:
         vertex['gulper']=False
-        friends_of_current_user_and_neighbor_of_reference_node = []
 
-        for page in twee.Cursor(api.friends_ids, screen_name=vertex['screen_name']).pages():
-            # check for friends who are in the network
-            friend_of_vertex_ids.extend(page)
-            print "sleeping..."
-            time.sleep(60)
+    friends_of_current_user_and_neighbor_of_reference_node = []
+    for page in twee.Cursor(api.friends_ids, screen_name=vertex['screen_name']).pages():
+        # check for friends who are in the network
+        friend_of_vertex_ids.extend(page)
+        print "sleeping..."
+        time.sleep(60)
 
-        for id in friend_of_vertex_ids:
-            if id in neighborhood_ids: # if the friend of vertex is also a neighbor of the reference node
-                friends_of_current_user_and_neighbor_of_reference_node.append(id)
+        if len(friend_of_vertex_ids) >= MAX_FRIEND_DEGREE:
+            break # get MAX_FRIEND_DEGREE samples and then stop collecting friends
+    for id in friend_of_vertex_ids:
+        if id in neighborhood_ids: # if the friend of vertex is also a neighbor of the reference node
+            friends_of_current_user_and_neighbor_of_reference_node.append(id)
 
-        current_node_idx = screen_name_to_vertex_index(current_user.screen_name)
+    current_node_idx = screen_name_to_vertex_index(current_user.screen_name)
 
-        print "updating friend record keeping..."
-        for friend in friends_of_current_user_and_neighbor_of_reference_node:
-            friend_of_neighbor = api.get_user(friend)
-            time.sleep(1)
-            print friend_of_neighbor.screen_name + " is a friend of " + current_user.screen_name + " and " + reference_user
+    print "updating friend record keeping..."
+    for friend in friends_of_current_user_and_neighbor_of_reference_node:
+        friend_of_neighbor = api.get_user(friend)
+        time.sleep(1)
+        print friend_of_neighbor.screen_name + " is a friend of " + current_user.screen_name + " and " + reference_user
 
-            if not(edge_exists(current_user, friend_of_neighbor)): # could call this earlier to cut a few api calls (~ factor 2)
-                                                        # need a cleverer approach when number of edges gets big (e.g. just add edge and then trim duplicates in a later step)
-                weight = 1
-                edges.append({"source":current_user.screen_name,"target":friend_of_neighbor.screen_name,"weight":weight})
-                friend_of_friend_idx = screen_name_to_vertex_index(friend_of_neighbor.screen_name)
-                adjmat[current_node_idx, friend_of_friend_idx] += weight
+        if not(edge_exists(current_user, friend_of_neighbor)): # could call this earlier to cut a few api calls (~ factor 2)
+                                                    # need a cleverer approach when number of edges gets big (e.g. just add edge and then trim duplicates in a later step)
+            weight = 1
+            edges.append({"source":current_user.screen_name,"target":friend_of_neighbor.screen_name,"weight":weight})
+            friend_of_friend_idx = screen_name_to_vertex_index(friend_of_neighbor.screen_name)
+            adjmat[current_node_idx, friend_of_friend_idx] += weight
+# paste temp
+        print "checking friends of current vertex...."
+    if current_user.friends_count > MAX_FRIEND_DEGREE:
+        vertex['gulper']=True # todo make sure this actually modifies the vertex object
+        print "sampling " + str( (MAX_FRIEND_DEGREE/current_user.friends_count)*100) + " % of friends"
+    else:
+        vertex['gulper']=False
 
     ## check followers
     print "checking followersof current vertex...."
-    if current_user.followers_count > MAX_DEGREE:
+    if current_user.followers_count > MAX_FOLLOWER_DEGREE:
         vertex['celebrity']=True # todo make sure this actually modifies the vertex object
-        print "this user has too many followers"
+        print "sampling " + str( (MAX_FOLLOWER_DEGREE/current_user.friends_count)*100) + " % of followers"
     else:
         vertex['celebrity']=False
-        followers_of_current_user_and_neighbor_of_reference_node = []
 
-        for page in twee.Cursor(api.followers_ids, screen_name=vertex['screen_name']).pages():
-            # check for friends who are in the network
-            follower_of_vertex_ids.extend(page)
-            print "sleeping..."
-            time.sleep(60)
+    followers_of_current_user_and_neighbor_of_reference_node = []
 
-        for id in follower_of_vertex_ids:
-            if id in neighborhood_ids: # if the follower of vertex is also a neighbor of the reference node
-                followers_of_current_user_and_neighbor_of_reference_node.append(id)
+    for page in twee.Cursor(api.followers_ids, screen_name=vertex['screen_name']).pages():
+        # check for friends who are in the network
+        follower_of_vertex_ids.extend(page)
+        print "sleeping..."
+        time.sleep(60)
 
-        current_node_idx = screen_name_to_vertex_index(current_user.screen_name)
+        if len(follower_of_vertex_ids) >= MAX_FOLLOWER_DEGREE:
+            break # get MAX_FOLLOWER_DEGREE samples and then stop collecting followers
 
-        print "updating follower record keeping..."
-        for follower in followers_of_current_user_and_neighbor_of_reference_node:
-            follower_of_neighbor = api.get_user(follower)
-            print follower_of_neighbor.screen_name + " is a friend of " + current_user.screen_name + " and " + reference_user
-            time.sleep(1)
+    for id in follower_of_vertex_ids:
+        if id in neighborhood_ids: # if the follower of vertex is also a neighbor of the reference node
+            followers_of_current_user_and_neighbor_of_reference_node.append(id)
 
-            if not(edge_exists(current_user, follower_of_neighbor)): # could call this earlier to cut a few api calls (~ factor 2)
-                                                        # need a cleverer approach when number of edges gets big (e.g. just add edge and then trim duplicates in a later step)
-                weight = 1
-                edges.append({"source":current_user.screen_name,"target":follower_of_neighbor.screen_name,"weight":weight})
-                follower_of_neighbor_idx = screen_name_to_vertex_index(follower_of_neighbor.screen_name)
-                adjmat[current_node_idx, follower_of_neighbor_idx] += weight
+    current_node_idx = screen_name_to_vertex_index(current_user.screen_name)
 
-        print "finished processing v = " + current_user.screen_name
-        visited.append(current_user.screen_name)
+    print "updating follower record keeping..."
+    for follower in followers_of_current_user_and_neighbor_of_reference_node:
+        follower_of_neighbor = api.get_user(follower)
+        print follower_of_neighbor.screen_name + " is a friend of " + current_user.screen_name + " and " + reference_user
+        time.sleep(1)
+
+        if not(edge_exists(current_user, follower_of_neighbor)): # could call this earlier to cut a few api calls (~ factor 2)
+                                                    # need a cleverer approach when number of edges gets big (e.g. just add edge and then trim duplicates in a later step)
+            weight = 1
+            edges.append({"source":current_user.screen_name,"target":follower_of_neighbor.screen_name,"weight":weight})
+            follower_of_neighbor_idx = screen_name_to_vertex_index(follower_of_neighbor.screen_name)
+            adjmat[current_node_idx, follower_of_neighbor_idx] += weight
+
+    print "finished processing v = " + current_user.screen_name
+    visited.append(current_user.screen_name)
 
 # FIND neighborhood interconnections
 print "discovering neighborhood interconnections..."
@@ -198,7 +225,8 @@ num_edges = np.sum(adjmat.flatten())
 print "there are " + str(num_edges) + " links in the network"
 print np.shape(adjmat)
 
-save_object = {"vertices":vertices,"edges":edges,"adjacency_matrix":adjmat.tolist(),"max_degree_cutoff":MAX_DEGREE}
+save_object = {"vertices":vertices,"edges":edges,"adjacency_matrix":adjmat.tolist(),
+               "max_friend_degree_cutoff":MAX_FRIEND_DEGREE,"max_follower_degree_cutoff":MAX_FOLLOWER_DEGREE}
 
 json_target_file = open(json_target_string,'w')
 json.dump(save_object, json_target_file, indent=2, sort_keys=True)
